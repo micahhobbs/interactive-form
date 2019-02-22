@@ -1,13 +1,8 @@
-
-
-
 /*
     Show/hide other job role text area
 */ 
 
-// Hide by default on load
 $(`#other-title, label[for="other-title"]`).hide();
-
 $(`#title`).change(function(){
     const $jobTitle = $(`#title`).val();
     if ($jobTitle === `other`) {
@@ -20,33 +15,6 @@ $(`#title`).change(function(){
 /*
     Configure t-shirt info section options
 */ 
-
-// $(`#design`).change(function(){
-//     $(`option[value="cornflowerblue"],
-//         option[value="darkslategrey"],
-//         option[value="gold"],
-//         option[value="tomato"],
-//         option[value="steelblue"],
-//         option[value="dimgrey"]`).show();
-//     const $designSelected = $(`#design`).val();
-//     if ($designSelected === `js puns`) {
-//         $()
-//         $(`option[value="tomato"],
-//             option[value="steelblue"],
-//             option[value="dimgrey"]`).hide();
-//     } else if ($designSelected === `heart js`) {
-//         $(`option[value="cornflowerblue"],
-//         option[value="darkslategrey"],
-//         option[value="gold"]`).hide();
-//     } else {
-//         $(`option[value="cornflowerblue"],
-//         option[value="darkslategrey"],
-//         option[value="gold"],
-//         option[value="tomato"],
-//         option[value="steelblue"],
-//         option[value="dimgrey"]`).show();
-//     }
-// });
 
 $(`#design`).change(function(){
     $(`.love-js`).show();
@@ -63,6 +31,9 @@ $(`#design`).change(function(){
     }
 });
 
+/*
+    Activities section
+*/
 
 // enable/disable checkboxes 
 $(`.activities input:checkbox`).change(function(){
@@ -94,14 +65,62 @@ $(`.activities input:checkbox`).change(function(){
     $(`.activities input:checkbox:checked`).each(function(){
         totalCost += parseFloat(this.value);
     });
+    // Display total element
     if (totalCost > 0) {
         activitiesTotalDiv.classList.remove(`is-hidden`)
-        displayTotal(totalCost);
+        activitiesP.textContent = `Total Amount: $${totalCost}`
     } else {
         activitiesTotalDiv.classList.add(`is-hidden`)
     }
 }); 
 
-function displayTotal(totalAmount) {
-    activitiesP.textContent = `Total Amount: $${totalAmount}`
+/*
+    Payment info section
+*/
+
+$(`#paypal, #bitcoin`).hide();
+
+// Show / hide relevent payment method sections
+$(`#payment`).change(function() {
+    if ($(this).val() === `paypal`) {
+        $(`#credit-card`).hide();
+        $(`#bitcoin`).hide();
+        $(`#paypal`).show();
+    } else if ($(this).val() === `bitcoin`) {
+        $(`#credit-card`).hide();
+        $(`#paypal`).hide();
+        $(`#bitcoin`).show(); 
+    } else {
+        $(`#credit-card`).show();
+        $(`#paypal`).hide();
+        $(`#bitcoin`).hide();
+    }
+});
+
+/*
+    Form validation
+*/
+
+$(`#name`).change(function(event){
+    let nameInput = this.value; 
+    const nameRegex = /^$|\s+/;
+    if (regexParser(nameInput, nameRegex)){
+        warningMessage(event)
+    } else {
+        validatedMessage(event)
+    }
+});
+
+// function to pass regex and form element
+function regexParser(pattern, string) {
+    return pattern.test(string)
+}
+
+// function to pass produce form warnings
+function warningMessage(event) {
+
+}
+
+function validatedMessage(event) {
+
 }
