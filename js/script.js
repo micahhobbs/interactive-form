@@ -64,15 +64,6 @@ $(`#design`).change(function(){
 });
 
 
-// ”Register for Activities” section
-
-// Some events are at the same day and time as others. If the user selects a workshop, don't allow selection of a workshop at the same day and time -- you should disable the checkbox and visually indicate that the workshop in the competing time slot isn't available.
-
-// When a user unchecks an activity, make sure that competing activities (if there are any) are no longer disabled.
-
-// As a user selects activities, a running total should display below the list of checkboxes. For example, if the user selects "Main Conference", then Total: $200 should appear. If they add 1 workshop, the total should change to Total: $300.
-
-
 // enable/disable checkboxes 
 $(`.activities input:checkbox`).change(function(){
     if ($(this).hasClass(`morning-session`)) {
@@ -90,7 +81,27 @@ $(`.activities input:checkbox`).change(function(){
     }
 }); 
 
-
-
+// Create running total elements and append to DOM
+const activitiesSection = document.getElementsByClassName(`activities`)[0];
+const activitiesTotalDiv = document.createElement(`div`);
+const activitiesP = document.createElement(`p`);
+activitiesTotalDiv.appendChild(activitiesP);
+activitiesSection.appendChild(activitiesTotalDiv);
 
 // Calculate total 
+$(`.activities input:checkbox`).change(function(){
+    let totalCost = 0;
+    $(`.activities input:checkbox:checked`).each(function(){
+        totalCost += parseFloat(this.value);
+    });
+    if (totalCost > 0) {
+        activitiesTotalDiv.classList.remove(`is-hidden`)
+        displayTotal(totalCost);
+    } else {
+        activitiesTotalDiv.classList.add(`is-hidden`)
+    }
+}); 
+
+function displayTotal(totalAmount) {
+    activitiesP.textContent = `Total Amount: $${totalAmount}`
+}
