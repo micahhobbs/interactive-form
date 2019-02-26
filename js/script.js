@@ -73,11 +73,12 @@ $(`.activities input:checkbox`).change(function(){
     // Display total element
     if (totalCost > 0) {
         activitiesTotalDiv.classList.remove(`is-hidden`)
-        activitiesWarningMessage.textContent = ``;
+        //activitiesWarningMessage.textContent = ``;
         activitiesP.textContent = `Total Amount: $${totalCost}`
     } else {
-        activitiesTotalDiv.classList.add(`is-hidden`)
+        activitiesP.textContent = ``;
     }
+    console.log(totalCost);
 }); 
 
 /*
@@ -107,12 +108,11 @@ $(`#payment`).change(function() {
     Form validation
 */
     
-    // Create Activity warning message elements
-    const activitiesWarningMessage = document.createElement(`p`);
-    activitiesTotalDiv.appendChild(activitiesWarningMessage);
+// Create Activity warning message elements
+// const activitiesWarningMessage = document.createElement(`p`);
+// activitiesTotalDiv.appendChild(activitiesWarningMessage);
 
 $(`form`).submit(function(event){
-
     // Validate name field not blank
     const nameRegex = /^$|\s+/;
     const nameInput = $(`#name`).val()
@@ -136,8 +136,10 @@ $(`form`).submit(function(event){
     }
 
     // Check user selected at least one activity checkbox
-    if ($(`.activities input[type=checkbox]:checked`)) {
-        activitiesWarningMessage.textContent = `Please selection at least 1 activity`; 
+    if ($(`.activities input[type=checkbox]:checked`).length > 0) {
+        activitiesP.textContent = ``; 
+    } else {
+        activitiesP.textContent = `Please select at least 1 activity`;
     }
 
     // If payment credit card
