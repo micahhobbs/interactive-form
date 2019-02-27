@@ -107,32 +107,32 @@ $(`#payment`).change(function() {
 /*
     Form validation
 */
-    
-// Create Activity warning message elements
-// const activitiesWarningMessage = document.createElement(`p`);
-// activitiesTotalDiv.appendChild(activitiesWarningMessage);
 
 $(`form`).submit(function(event){
     // Validate name field not blank
-    const nameRegex = /^$|\s+/;
+    const nameRegex = /([\w]+)/;
     const nameInput = $(`#name`).val()
+    // const nameLabel = $(`label[for="name"]`);
     if (nameRegex.test(nameInput)){
-        event.preventDefault();
-        $(`#name`).css(`border`, `2px solid red`);
+        $(`#name`).css(`border`, ``);
+        // nameLabel.text(`Name:`)
     } else {
         event.preventDefault();
-        $(`#name`).css(`border`, ``);
+        $(`#name`).css(`border`, `2px solid red`);
+        // nameLabel.text(`Name: (Please include your name)`)
     }
 
     // Validate email address
-    const emailRegex = /^\w*@\w*\.com$/;
+    const emailRegex = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
     const emailInput = $(`#mail`).val()
+    // const emailLabel = $(`label[for="mail"]`)
     if (emailRegex.test(emailInput)){
-        event.preventDefault();
-        $(`#mail`).css(`border`, ``);
+        $(`#mail`).css(`border`, `2px solid lime`);
+        // emailLabel.text(`Email:`);
     } else {
         event.preventDefault();
         $(`#mail`).css(`border`, `2px solid red`);
+        // emailLabel.text(`Email: (Must be a valid email address)`)
     }
 
     // Check user selected at least one activity checkbox
@@ -143,31 +143,52 @@ $(`form`).submit(function(event){
     }
 
     // If payment credit card
-    // Make sure CC number between 13 and 15
-    const ccNumRegex = /^\d{13,16}$/;
-    const ccNumInput = $(`#cc-num`).val();
-    if (ccNumRegex.test(ccNumInput)) {
-        $(`#cc-num`).css(`border`, ``);
-    } else {
-        $(`#cc-num`).css(`border`, `2px solid red`);
+    if ($(`#payment`).val() === `credit_card`) {
+        // Make sure CC number between 13 and 15
+        const ccNumRegex = /^\d{13,16}$/;
+        let ccNumInput = $(`#cc-num`).val();
+        if (ccNumRegex.test(ccNumInput)) {
+            $(`#cc-num`).css(`border`, `2px solid lime`);
+            // ccNumLabel.text(`Card Number:`)
+        } else if (ccNumInput.length === 0) {
+            $(`#cc-num`).css(`border`, `2px solid red`);
+            //ccNumInput(`why`);
+            // ccNumLabel.text(`Card Number: (Enter a credit card number)`);
+        } else {
+            $(`#cc-num`).css(`border`, `2px solid red`);
+            // ccNumLabel.text(`Card Number: (13 and 16 digits long)`)
+        }
+    
+        // Zip code is a 5 digit number
+        const ccZipRegex = /^\d{3,5}$/;
+        const ccZipInput = $(`#zip`).val();
+        if (ccZipRegex.test(ccZipInput)) {
+            $(`#zip`).css(`border`, ``);
+        } else {
+            $(`#zip`).css(`border`, `2px solid red`);
+        }
+    
+        const ccCVVRegex = /^\d{3}$/;
+        const ccCVVInput = $(`#cvv`).val();
+        if (ccCVVRegex.test(ccCVVInput)) {
+            $(`#cvv`).css(`border`, ``);
+        } else {
+            $(`#cvv`).css(`border`, `2px solid red`);
+        }
     }
-
-    // Zip code is a 5 digit number
-    const ccZipRegex = /^\d{3,5}$/;
-    const ccZipInput = $(`#zip`).val();
-    if (ccZipRegex.test(ccZipInput)) {
-        $(`#zip`).css(`border`, ``);
-    } else {
-        $(`#zip`).css(`border`, `2px solid red`);
-    }
-
-    const ccCVVRegex = /^\d{3}$/;
-    const ccCVVInput = $(`#cvv`).val();
-    if (ccCVVRegex.test(ccCVVInput)) {
-        $(`#cvv`).css(`border`, ``);
-    } else {
-        $(`#cvv`).css(`border`, `2px solid red`);
-    }
-
 });
 
+/*
+    Real time form validation - email
+*/
+
+const emailRegex2 = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+$(`#mail`).keyup(function(){   
+    if (emailRegex2.test($(`#mail`).val())) {
+        $(`#mail`).css(`border`, `2px solid lime`)
+    } else {
+        $(`#mail`).css(`border`, `2px solid red`)
+    }
+});
+
+// TODO - figure out how to best display conditional warning message
