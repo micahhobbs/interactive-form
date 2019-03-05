@@ -86,7 +86,6 @@ $(`.activities input:checkbox`).change(function(){
 */
 
 $(`#paypal, #bitcoin`).hide();
-
 // Show / hide relevent payment method sections
 $(`#payment`).change(function() {
     if ($(this).val() === `paypal`) {
@@ -112,27 +111,22 @@ $(`form`).submit(function(event){
     // Validate name field not blank
     const nameRegex = /([\w]+)/;
     const nameInput = $(`#name`).val()
-    // const nameLabel = $(`label[for="name"]`);
     if (nameRegex.test(nameInput)){
         $(`#name`).css(`border`, ``);
-        // nameLabel.text(`Name:`)
     } else {
         event.preventDefault();
         $(`#name`).css(`border`, `2px solid red`);
-        // nameLabel.text(`Name: (Please include your name)`)
     }
 
     // Validate email address
     const emailRegex = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
     const emailInput = $(`#mail`).val()
-    // const emailLabel = $(`label[for="mail"]`)
     if (emailRegex.test(emailInput)){
         $(`#mail`).css(`border`, `2px solid lime`);
-        // emailLabel.text(`Email:`);
     } else {
         event.preventDefault();
+        event.preventDefault();
         $(`#mail`).css(`border`, `2px solid red`);
-        // emailLabel.text(`Email: (Must be a valid email address)`)
     }
 
     // Check user selected at least one activity checkbox
@@ -146,17 +140,20 @@ $(`form`).submit(function(event){
     if ($(`#payment`).val() === `credit_card`) {
         // Make sure CC number between 13 and 15
         const ccNumRegex = /^\d{13,16}$/;
-        let ccNumInput = $(`#cc-num`).val();
-        if (ccNumRegex.test(ccNumInput)) {
+        let ccNumInputValue = $(`#cc-num`).val();
+        const ccNumInput = $(`#cc-num`);
+        if (ccNumRegex.test(ccNumInputValue)) {
             $(`#cc-num`).css(`border`, `2px solid lime`);
-            // ccNumLabel.text(`Card Number:`)
-        } else if (ccNumInput.length === 0) {
+        } else if (ccNumInputValue.length === 0) {
+            event.preventDefault();
             $(`#cc-num`).css(`border`, `2px solid red`);
-            //ccNumInput(`why`);
-            // ccNumLabel.text(`Card Number: (Enter a credit card number)`);
+            ccNumInput.attr(`placeholder`, `Please enter a credit card number`);
+        } else if (ccNumInputValue.length < 13 || ccNumInputValue.length > 16) {
+            ccNumInput.val(``);
+            $(`#cc-num`).css(`border`, `2px solid red`);
+            ccNumInput.attr(`placeholder`, `Provide number between 13 and 16 digits`);
         } else {
             $(`#cc-num`).css(`border`, `2px solid red`);
-            // ccNumLabel.text(`Card Number: (13 and 16 digits long)`)
         }
     
         // Zip code is a 5 digit number
@@ -166,6 +163,7 @@ $(`form`).submit(function(event){
             $(`#zip`).css(`border`, ``);
         } else {
             $(`#zip`).css(`border`, `2px solid red`);
+            event.preventDefault();
         }
     
         const ccCVVRegex = /^\d{3}$/;
@@ -174,6 +172,7 @@ $(`form`).submit(function(event){
             $(`#cvv`).css(`border`, ``);
         } else {
             $(`#cvv`).css(`border`, `2px solid red`);
+            event.preventDefault();
         }
     }
 });
@@ -190,5 +189,3 @@ $(`#mail`).keyup(function(){
         $(`#mail`).css(`border`, `2px solid red`)
     }
 });
-
-// TODO - figure out how to best display conditional warning message

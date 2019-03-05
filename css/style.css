@@ -113,9 +113,9 @@ button:hover {
 	background: #184c62;
 }
 
-/* .warning-message {
-	border-color: red;
-} */
+::placeholder {
+	font-size: 14px;
+  }
 
 /* ================================= 
   Page Styles
