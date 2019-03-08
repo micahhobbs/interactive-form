@@ -73,7 +73,6 @@ $(`.activities input:checkbox`).change(function(){
     // Display total element
     if (totalCost > 0) {
         activitiesTotalDiv.classList.remove(`is-hidden`)
-        //activitiesWarningMessage.textContent = ``;
         activitiesP.textContent = `Total Amount: $${totalCost}`
     } else {
         activitiesP.textContent = ``;
@@ -134,6 +133,7 @@ $(`form`).submit(function(event){
         activitiesP.textContent = ``; 
     } else {
         activitiesP.textContent = `Please select at least 1 activity`;
+        event.preventDefault();
     }
 
     // If payment credit card
@@ -149,10 +149,12 @@ $(`form`).submit(function(event){
             $(`#cc-num`).css(`border`, `2px solid red`);
             ccNumInput.attr(`placeholder`, `Please enter a credit card number`);
         } else if (ccNumInputValue.length < 13 || ccNumInputValue.length > 16) {
+            event.preventDefault();
             ccNumInput.val(``);
             $(`#cc-num`).css(`border`, `2px solid red`);
             ccNumInput.attr(`placeholder`, `Provide number between 13 and 16 digits`);
         } else {
+            event.preventDefault();
             $(`#cc-num`).css(`border`, `2px solid red`);
         }
     
@@ -160,16 +162,17 @@ $(`form`).submit(function(event){
         const ccZipRegex = /^\d{3,5}$/;
         const ccZipInput = $(`#zip`).val();
         if (ccZipRegex.test(ccZipInput)) {
-            $(`#zip`).css(`border`, ``);
+            $(`#zip`).css(`border`, `2px solid lime`);
         } else {
             $(`#zip`).css(`border`, `2px solid red`);
             event.preventDefault();
         }
     
+        // CVV is a 3 digit number
         const ccCVVRegex = /^\d{3}$/;
         const ccCVVInput = $(`#cvv`).val();
         if (ccCVVRegex.test(ccCVVInput)) {
-            $(`#cvv`).css(`border`, ``);
+            $(`#cvv`).css(`border`, `2px solid lime`);
         } else {
             $(`#cvv`).css(`border`, `2px solid red`);
             event.preventDefault();
